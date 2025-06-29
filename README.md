@@ -1,5 +1,5 @@
 ![NBS3DF Banner](.github/banner.png)
-![Discord](https://img.shields.io/discord/1359647797451686118?style=for-the-badge&logo=discord&logoColor=%23FFFFFF&label=Discord&color=%235865F2&link=https%3A%2F%2Fdiscord.gg%2FFTuTFhxZW4)
+[![Discord](https://img.shields.io/discord/1359647797451686118?style=for-the-badge&logo=discord&logoColor=%23FFFFFF&label=Discord&color=%235865F2)](https://discord.gg/FTuTFhxZW4)
 
 ---
 

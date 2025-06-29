@@ -12,6 +12,7 @@ dependencies {
     modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.language.kotlin)
+    implementation(project(":common"))
 }
 
 fabricModJson {

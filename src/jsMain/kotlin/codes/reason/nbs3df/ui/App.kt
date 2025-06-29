@@ -3,7 +3,6 @@ package codes.reason.nbs3df.ui
 import androidx.compose.runtime.*
 import codes.reason.nbs3df.NBSFile
 import codes.reason.nbs3df.convert
-import codes.reason.nbs3df.parse
 import codes.reason.nbs3df.util.asByteReader
 import org.jetbrains.compose.web.dom.*
 
@@ -65,7 +64,7 @@ fun App() {
                 FileUploadButton(
                     accepts = listOf(".nbs"),
                     processFile = {
-                        currentNBSFile = parse(it.asByteReader())
+                        currentNBSFile = NBSFile.parse(it.asByteReader())
                     }
                 )
             }

@@ -9,7 +9,6 @@ import codes.reason.nbs3df.util.chunked
 import codes.reason.nbs3df.util.compress
 import codes.reason.nbs3df.util.toBase64
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.math.pow
 

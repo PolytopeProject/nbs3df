@@ -6,7 +6,6 @@ import java.util.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-
 actual fun ByteArray.toBase64(): String {
     return Base64.getEncoder().encodeToString(this)
 }

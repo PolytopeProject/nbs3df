@@ -1,8 +1,7 @@
-package codes.reason.nbs3df.df
+package codes.reason.nbs3df.template
 
 import codes.reason.nbs3df.util.compress
 import codes.reason.nbs3df.util.toBase64
-import codes.reason.nbs3df.util.toUint8Array
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
@@ -14,8 +13,7 @@ data class CodeTemplateData(val blocks: List<BlockOrBracket>) {
             classDiscriminator = "id"
             prettyPrint = false
         }
-        println(json.encodeToJsonElement(this).toString())
         return json.encodeToJsonElement(this).toString()
-            .encodeToByteArray().toUint8Array().compress().toBase64()
+            .encodeToByteArray().compress().toBase64()
     }
 }

@@ -1,15 +1,17 @@
 plugins {
-    kotlin("multiplatform") version "2.0.21"
-    kotlin("plugin.serialization") version "2.0.21"
-    id("org.jetbrains.compose") version "1.7.0-alpha03"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.0.21"
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.compose)
 }
 
-group = "codes.reason"
-version = "1.0-SNAPSHOT"
+allprojects {
+    group = "codes.reason"
+    version = "1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+        maven("https://maven.fabricmc.net/")
+    }
 }
 
 kotlin {
@@ -35,22 +37,13 @@ kotlin {
     sourceSets {
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1") // or latest
-                implementation(compose.html.core)
-                implementation(compose.html.svg)
-                implementation(compose.runtime)
-
+                implementation(libs.serialization.json)
+                implementation(libs.coroutines.core)
+                implementation(libs.compose.html.core)
+                implementation(libs.compose.html.svg)
+                implementation(libs.compose.runtime)
+                implementation(project(":common"))
             }
         }
     }
 }
-tasks {
-    named<Copy>("jsProcessResources") {
-        from("df-sound-mappings") {
-            include("minecraft_to_df.json")
-        }
-    }
-
-}
-

@@ -1,4 +1,4 @@
-package codes.reason.nbs3df.nbs
+package codes.reason.nbs3df
 
 data class NBSFile(
     val header: NBSHeader,
@@ -61,7 +61,7 @@ data class Note(
     val velocity: Byte,
     val panning: Int,
     val pitch: Short,
-    val layer: Short
+    val layer: Int
 )
 
 data class CustomInstrument(

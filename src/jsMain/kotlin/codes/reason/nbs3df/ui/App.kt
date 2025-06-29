@@ -1,7 +1,10 @@
 package codes.reason.nbs3df.ui
 
 import androidx.compose.runtime.*
-import codes.reason.nbs3df.nbs.*
+import codes.reason.nbs3df.NBSFile
+import codes.reason.nbs3df.convert
+import codes.reason.nbs3df.parse
+import codes.reason.nbs3df.util.asByteReader
 import org.jetbrains.compose.web.dom.*
 
 @Composable
@@ -44,7 +47,9 @@ fun App() {
                     ButtonPrimary(
                         attrs = {
                             onClick {
-                                println(currentNBSFile?.generateTemplate()?.encode())
+                                for (codeTemplateData in currentNBSFile?.convert().orEmpty()) {
+                                    println(codeTemplateData.encode())
+                                }
                             }
                         }
                     ) {
@@ -60,7 +65,7 @@ fun App() {
                 FileUploadButton(
                     accepts = listOf(".nbs"),
                     processFile = {
-                        currentNBSFile = it.parseAsNBS()
+                        currentNBSFile = parse(it.asByteReader())
                     }
                 )
             }

@@ -1,22 +1,20 @@
-package codes.reason.nbs3df.nbs
+package codes.reason.nbs3df
 
-import codes.reason.nbs3df.util.asByteReader
-import org.w3c.files.File
-import kotlin.collections.List
+import codes.reason.nbs3df.util.ByteReader
 
-suspend fun File.parseAsNBS(): NBSFile {
-    val reader = this.asByteReader()
-
-    // In NBS v0 the length of the song is the first short
-    // in NBS v1 or higher this is 0 and the version is present
-    // after wards.
+// The documentation for the NBS format can be found at:
+//     https://noteblock.studio/nbs
+fun parse(reader: ByteReader): NBSFile {
     var version = 0.toByte()
+
+    // In version 0 of the NBS format, the first 2 bytes encode
+    // the length of the song, if the value is 0 then it is assumed
+    // that the file is a versioned NBS file, in which the actual
+    // version is read.
     val legacyLength = reader.readShort()
     if (legacyLength.toInt() == 0) {
         version = reader.readByte()
     }
-
-    println("Version $version NBS file provided.")
 
     // Parse the header of the file.
     val header = NBSHeader(
@@ -55,37 +53,40 @@ suspend fun File.parseAsNBS(): NBSFile {
         }
     )
 
-    // Parse every note in the NBS file
-    val noteMap: MutableMap<Int, List<Note>> = mutableMapOf()
-    var currentTick = -1
+    // Parse the notes of the file
     var noteCount = 0
-    while (true) {
-        val tickOffset = reader.readShort()
-        if (tickOffset == 0.toShort()) {
-            break
-        }
-        currentTick += tickOffset
+    val notes: Map<Int, List<Note>> = buildMap {
+        var currentTick = -1
 
-        val notes = mutableListOf<Note>()
-        var currentLayer: Short = -1
-        while (true) {
-            val layerOffset = reader.readShort()
-            if (layerOffset == 0.toShort()) {
-                break
-            }
-            currentLayer = (currentLayer + layerOffset).toShort()
+        generateSequence {
+            val tickOffset = reader.readShort()
+            if (tickOffset == 0.toShort()) null
+            else tickOffset
+        }.forEach {
+            currentTick += it
 
-            notes += Note(
-                instrument = reader.readByte(),
-                key = reader.readByte(),
-                velocity = if (version >= 4) reader.readByte() else 100,
-                panning = if (version >= 4) reader.readUByte() else 100,
-                pitch = if (version >= 4) reader.readShort() else 0,
-                layer = currentLayer
-            )
-            noteCount++
+            put(currentTick, buildList {
+                var currentLayer = -1
+
+                generateSequence {
+                    val layerOffset = reader.readShort()
+                    if (layerOffset == 0.toShort()) null
+                    else layerOffset
+                }.forEach { layerOffset ->
+                    currentLayer += layerOffset
+
+                    add(Note(
+                        instrument = reader.readByte(),
+                        key = reader.readByte(),
+                        velocity = if (version >= 4) reader.readByte() else 100,
+                        panning = if (version >= 4) reader.readUByte() else 100,
+                        pitch = if (version >= 4) reader.readShort() else 0,
+                        layer = currentLayer
+                    ))
+                    noteCount++
+                }
+            })
         }
-        noteMap[currentTick] = notes.toList()
     }
 
     // Parse layers
@@ -115,5 +116,5 @@ suspend fun File.parseAsNBS(): NBSFile {
         customInstruments = customInstruments.size
     )
 
-    return NBSFile(header, noteMap.toMap(), layers, customInstruments, metrics)
+    return NBSFile(header, notes, layers, customInstruments, metrics)
 }

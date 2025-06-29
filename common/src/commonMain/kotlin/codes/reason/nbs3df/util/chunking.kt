@@ -1,11 +1,11 @@
 package codes.reason.nbs3df.util
 
-fun <T> List<T>.chunk(chunkSize: Int): List<List<T>> {
-    val chunks = mutableListOf<List<T>>()
+fun ByteArray.chunked(chunkSize: Int): List<ByteArray> {
+    val chunks = mutableListOf<ByteArray>()
     var start = 0
     while (start < this.size) {
         val end = (start + chunkSize).coerceAtMost(this.size)
-        chunks.add(this.subList(start, end))
+        chunks.add(this.copyOfRange(start, end))
         start = end
     }
     return chunks.toList()

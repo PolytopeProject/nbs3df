@@ -1,5 +1,6 @@
 ![NBS3DF Banner](.github/banner.png)
-[![Discord](https://img.shields.io/discord/1359647797451686118?style=for-the-badge&logo=discord&logoColor=%23FFFFFF&label=Discord&color=%235865F2)](https://discord.gg/FTuTFhxZW4)
+[![Discord](https://img.shields.io/discord/1359647797451686118?style=flat&logo=discord&logoColor=%23FFFFFF&label=Discord&color=%235865F2)](https://discord.gg/FTuTFhxZW4)
+[![GitHub License](https://img.shields.io/github/license/PolytopeProject/NBS3DF)](LICENSE.txt)
 
 ---
 

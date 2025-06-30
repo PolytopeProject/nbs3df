@@ -13,8 +13,6 @@ object SongByteEncoder {
           unsigned short - Pitch
              signed byte - Panning (-100 to 100)
      */
-    val CURRENT_VERSION_FORMAT = 1
-
     fun encodeSongBytes(song: NBSSong): ByteArray {
         val writer = ByteWriter()
 

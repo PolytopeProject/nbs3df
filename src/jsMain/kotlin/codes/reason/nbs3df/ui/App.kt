@@ -1,14 +1,14 @@
 package codes.reason.nbs3df.ui
 
 import androidx.compose.runtime.*
-import codes.reason.nbs3df.NBSFile
-import codes.reason.nbs3df.convert
+import codes.reason.nbs3df.song.NBSSong
+import codes.reason.nbs3df.song.converter.SongConverter
 import codes.reason.nbs3df.util.asByteReader
 import org.jetbrains.compose.web.dom.*
 
 @Composable
 fun App() {
-    var currentNBSFile: NBSFile? by remember { mutableStateOf(null) }
+    var currentSong: NBSSong? by remember { mutableStateOf(null) }
 
     CenteredContainer {
         Card(image = "background.png") {
@@ -21,10 +21,10 @@ fun App() {
                 )
             }
 
-            if (currentNBSFile != null) {
-                val meta = currentNBSFile!!.header.meta
-                val metrics = currentNBSFile!!.metrics
-                val looping = currentNBSFile!!.header.looping
+            if (currentSong != null) {
+                val meta = currentSong!!.header.meta
+                val metrics = currentSong!!.metrics
+                val looping = currentSong!!.header.looping
                 Span(attrs = { classes("d-flex", "gap-3", "align-items-center") }) {
                     BootstrapIcon("music-note-list")
                     B { Text("Convert ${meta.name} by ${meta.author}") }
@@ -46,7 +46,7 @@ fun App() {
                     ButtonPrimary(
                         attrs = {
                             onClick {
-                                for (codeTemplateData in currentNBSFile?.convert().orEmpty()) {
+                                for (codeTemplateData in SongConverter.convertSong(currentSong!!)) {
                                     println(codeTemplateData.encode())
                                 }
                             }
@@ -64,7 +64,7 @@ fun App() {
                 FileUploadButton(
                     accepts = listOf(".nbs"),
                     processFile = {
-                        currentNBSFile = NBSFile.parse(it.asByteReader())
+                        currentSong = NBSSong.parse(it.asByteReader())
                     }
                 )
             }

@@ -1,18 +1,18 @@
-package codes.reason.nbs3df
+package codes.reason.nbs3df.song
 
 import codes.reason.nbs3df.util.ByteReader
 
-data class NBSFile(
-    val header: NBSHeader,
-    val notes: Map<Int, List<Note>>,
-    val layers: List<Layer>,
+data class NBSSong(
+    val header: SongHeader,
+    val notes: Map<Int, List<SongNote>>,
+    val layers: List<SongLayer>,
     val instruments: List<CustomInstrument>,
     val metrics: SongMetrics
 ) {
     companion object {
         // The documentation for the NBS format can be found at:
         //     https://noteblock.studio/nbs
-        fun parse(reader: ByteReader): NBSFile {
+        fun parse(reader: ByteReader): NBSSong {
             var version = 0.toByte()
 
             // In version 0 of the NBS format, the first 2 bytes encode
@@ -25,7 +25,7 @@ data class NBSFile(
             }
 
             // Parse the header of the file.
-            val header = NBSHeader(
+            val header = SongHeader(
                 version = version,
                 vanillaInstruments = if (version > 0) reader.readByte() else 9,
                 length = if (version >= 3) reader.readShort() else legacyLength,
@@ -63,7 +63,7 @@ data class NBSFile(
 
             // Parse the notes of the file
             var noteCount = 0
-            val notes: Map<Int, List<Note>> = buildMap {
+            val notes: Map<Int, List<SongNote>> = buildMap {
                 var currentTick = -1
 
                 generateSequence {
@@ -83,7 +83,7 @@ data class NBSFile(
                         }.forEach { layerOffset ->
                             currentLayer += layerOffset
 
-                            add(Note(
+                            add(SongNote(
                                 instrument = reader.readByte(),
                                 key = reader.readByte(),
                                 velocity = if (version >= 4) reader.readByte() else 100,
@@ -99,7 +99,7 @@ data class NBSFile(
 
             // Parse layers
             val layers = List(header.layerCount.toInt()) {
-                Layer(
+                SongLayer(
                     name = reader.readString(),
                     locked = if (version >= 4) reader.readBoolean() else false,
                     volume = reader.readByte(),
@@ -124,76 +124,7 @@ data class NBSFile(
                 customInstruments = customInstruments.size
             )
 
-            return NBSFile(header, notes, layers, customInstruments, metrics)
+            return NBSSong(header, notes, layers, customInstruments, metrics)
         }
     }
 }
-
-data class NBSHeader(
-    val version: Byte,
-    val vanillaInstruments: Byte,
-    val length: Short,
-    val layerCount: Short,
-    val meta: Metadata,
-    val tempo: Short,
-    val autoSaveConfig: AutoSaveConfig,
-    val timeSignature: Byte,
-    val stats: Statistics,
-    val schematicName: String,
-    val looping: Looping
-)
-
-data class AutoSaveConfig(
-    val enabled: Boolean,
-    val duration: Byte,
-)
-
-data class Metadata(
-    val name: String,
-    val author: String,
-    val originalAuthor: String,
-    val description: String
-)
-
-data class Statistics(
-    val minutesSpent: Int,
-    val leftClicks: Int,
-    val rightClicks: Int,
-    val noteBlocksAdded: Int,
-    val noteBlocksRemoved: Int
-)
-
-data class Looping(
-    val enabled: Boolean,
-    val maxLoop: Byte,
-    val startTick: Short
-)
-
-data class Layer(
-    val name: String,
-    val locked: Boolean,
-    val volume: Byte,
-    val stereo: Int
-)
-
-data class Note(
-    val instrument: Byte,
-    val key: Byte,
-    val velocity: Byte,
-    val panning: Int,
-    val pitch: Short,
-    val layer: Int
-)
-
-data class CustomInstrument(
-    val name: String,
-    val soundFile: String,
-    val soundKey: Byte,
-    val pressPianoKey: Boolean
-)
-
-data class SongMetrics(
-    val noteCount: Int,
-    val layerCount: Int,
-    val customInstruments: Int
-)

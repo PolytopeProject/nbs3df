@@ -1,9 +1,9 @@
-package codes.reason.nbs3df.plugins
+package codes.reason.nbs3df.song.plugin
 
-import codes.reason.nbs3df.NBSFile
+import codes.reason.nbs3df.song.NBSSong
 
 object TransposeNotesPlugin : NBSPlugin {
-    override fun apply(file: NBSFile): NBSFile {
+    override fun apply(file: NBSSong): NBSSong {
         val transposedNotes = file.notes.mapValues { (_, noteList) ->
             noteList.map { note ->
                 val transposedKey = transposeKey(note.key.toInt())

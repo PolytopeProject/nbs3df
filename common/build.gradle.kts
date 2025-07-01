@@ -3,10 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-repositories {
-    mavenCentral()
-}
-
 kotlin {
     js(IR) {
         browser()

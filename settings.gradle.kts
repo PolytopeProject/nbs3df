@@ -1,9 +1,9 @@
 pluginManagement {
     repositories {
-        maven("https://maven.fabricmc.net/")
-        gradlePluginPortal()
-        mavenCentral()
         google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
     }
 }
 dependencyResolutionManagement {
@@ -18,5 +18,5 @@ plugins {
 }
 rootProject.name = "nbs3df"
 include("common")
-include("fabric")
+//include("fabric")
 include("web")

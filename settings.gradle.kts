@@ -18,5 +18,5 @@ plugins {
 }
 rootProject.name = "nbs3df"
 include("common")
-//include("fabric")
+include("fabric")
 include("web")

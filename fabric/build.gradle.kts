@@ -12,6 +12,9 @@ dependencies {
     modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.language.kotlin)
+    modImplementation(libs.adventure.platform.fabric)
+
+    implementation(libs.adventure.api)
     implementation(project(":common"))
 }
 

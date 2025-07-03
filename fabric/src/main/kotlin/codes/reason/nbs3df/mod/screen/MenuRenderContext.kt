@@ -1,6 +1,7 @@
 package codes.reason.nbs3df.mod.screen
 
 import net.minecraft.client.gui.DrawContext
+import org.joml.Matrix4f
 import org.joml.Vector2f
 import org.joml.Vector4f
 
@@ -11,11 +12,12 @@ class MenuRenderContext(
     val deltaTime: Float
 ) {
     private val mousePosition: Vector2f get() = toLocalSpace(initialMouseX.toFloat(), initialMouseY.toFloat())
+
     val mouseX: Int get() = mousePosition.x.toInt()
     val mouseY: Int get() = mousePosition.y.toInt()
 
     fun toLocalSpace(x: Float, y: Float) : Vector2f {
-        val mat = drawContext.matrices.peek().positionMatrix.invert()
+        val mat = Matrix4f(drawContext.matrices.peek().positionMatrix).invert()
         val transformed = mat.transform(Vector4f(x, y, 0f, 1f))
 
         return Vector2f(transformed.x, transformed.y)

@@ -21,9 +21,9 @@ class TextElement(
         val textRenderer = MinecraftClient.getInstance().textRenderer
         val text = MinecraftClientAudiences.of().asNative(content())
         val lines = textRenderer.wrapLines(text, availableSize.width ?: Int.MAX_VALUE)
-        val width = lines.maxOfOrNull {
+        val width = (lines.maxOfOrNull {
             textRenderer.getWidth(it)
-        } ?: 0
+        } ?: 0).coerceAtLeast(availableSize.width ?: 0)
 
         println("$width at ${lines.size}")
 

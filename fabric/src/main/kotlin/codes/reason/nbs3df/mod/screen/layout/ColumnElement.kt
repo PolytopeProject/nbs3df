@@ -3,6 +3,7 @@ package codes.reason.nbs3df.mod.screen.layout
 import codes.reason.nbs3df.mod.screen.*
 import codes.reason.nbs3df.mod.screen.builder.ColumnElementBuilder
 import codes.reason.nbs3df.mod.screen.builder.ScopedElementBuilder
+import codes.reason.nbs3df.util.BoundedValue.Companion.maxOfBounded
 import codes.reason.nbs3df.util.BoundedValue.Companion.sumOfBounded
 import kotlin.math.abs
 
@@ -52,13 +53,13 @@ class ColumnElement(
 
         return ElementToken(
             width = ElementDimension(
-                minimumValue = childrenWithTokens.sumOfBounded {
+                minimumValue = childrenWithTokens.maxOfBounded {
                     it.token.width.minimumValue
                 },
-                preferredValue = childrenWithTokens.sumOf {
+                preferredValue = childrenWithTokens.maxOf {
                     it.token.width.preferredValue
                 },
-                maximumValue = childrenWithTokens.sumOfBounded {
+                maximumValue = childrenWithTokens.maxOfBounded {
                     it.token.width.maximumValue
                 }
             ),

@@ -3,6 +3,7 @@ package codes.reason.nbs3df.mod.screen.layout
 import codes.reason.nbs3df.mod.screen.*
 import codes.reason.nbs3df.mod.screen.builder.RowElementBuilder
 import codes.reason.nbs3df.mod.screen.builder.ScopedElementBuilder
+import codes.reason.nbs3df.util.BoundedValue.Companion.maxOfBounded
 import codes.reason.nbs3df.util.BoundedValue.Companion.sumOfBounded
 import kotlin.math.abs
 
@@ -59,13 +60,13 @@ class RowElement(
                 } + totalSpacing
             ),
             height = ElementDimension(
-                minimumValue = childrenWithTokens.sumOfBounded {
+                minimumValue = childrenWithTokens.maxOfBounded {
                     it.token.height.minimumValue
                 },
-                preferredValue = childrenWithTokens.sumOf {
+                preferredValue = childrenWithTokens.maxOf {
                     it.token.height.preferredValue
                 },
-                maximumValue = childrenWithTokens.sumOfBounded {
+                maximumValue = childrenWithTokens.maxOfBounded {
                     it.token.height.maximumValue
                 }
             )

@@ -12,6 +12,10 @@ open class ScopedElementBuilder : ElementBuilder {
         _elements += element
     }
 
+    operator fun Template.unaryPlus() {
+        this.body(this@ScopedElementBuilder)
+    }
+
     inline fun <E : Element, B : ElementBuilder> addNested(
         builder: B,
         content: B.() -> Unit,

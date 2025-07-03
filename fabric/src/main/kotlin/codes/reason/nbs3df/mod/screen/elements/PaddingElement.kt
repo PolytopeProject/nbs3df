@@ -16,7 +16,9 @@ class PaddingElement(
     private val child: Element
 ) : Element() {
     override fun createToken(availableSize: AvailableSize): ElementToken {
-        val childToken = child.createToken(availableSize)
+        val childToken = child.createToken(availableSize
+            .subtractWidth(leftPadding + rightPadding)
+            .subtractHeight(topPadding + bottomPadding))
         return ElementToken(
             width = ElementDimension(
                 minimumValue = childToken.width.minimumValue + leftPadding + rightPadding,
